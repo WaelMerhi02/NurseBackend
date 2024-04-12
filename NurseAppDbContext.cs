@@ -9,6 +9,9 @@ namespace NurseApp
         {
         }
         public DbSet<Users> Users { get; set; }
-        public DbSet<NurseAdvancedInfo>  NurseAdvancedInfos { get; set; }
+        public DbSet<NurseAdvancedInfo> NurseAdvancedInfo { get; set; }
+
+        public DbSet<NurseAvailableDates> NurseAvailableDates { get; set; }
+        public DbSet<NurseDetails> NurseDetails { get; set; }
     }
 }

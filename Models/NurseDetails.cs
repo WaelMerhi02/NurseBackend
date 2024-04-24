@@ -18,6 +18,7 @@
         public string? AvailableDates { get; set; }
         public decimal WeeklyPrice { get; set; }
         public string Location { get; set; }
+        
     }
 
 }

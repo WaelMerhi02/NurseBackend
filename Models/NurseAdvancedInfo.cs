@@ -9,8 +9,8 @@ namespace NurseApp.Models
         public string DateofBirth { get; set; } // dd-mm-yyyy
         public string Nationality { get; set; } //dropdownlist
         public string Location { get; set; } //dropdownlist multiselection
-        public bool IsSubscribed { get; set; } 
-        public string SubscriptionDate { get; set; }
+        public bool? IsSubscribed { get; set; } 
+        public string? SubscriptionDate { get; set; }
         public int YearsOfExperience { get; set; }
         public string Bio { get; set; }
         public string Expertise { get; set; } //multiple selection

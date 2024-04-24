@@ -161,6 +161,15 @@ namespace NurseApp.Controllers
             return Ok(await _usersRepo.getnurseadvancedinfoasync(nurseid));
         }
 
+        [HttpGet]
+        [Route("getnursesignupadvancedinfo")]
+        public async Task<ActionResult> getnursesignupadvancedinfo(int userid)
+        {
+            return Ok(await _usersRepo.getnursesignupadvancedinfoasync(userid));
+        }
+
+        
+
 
 
 

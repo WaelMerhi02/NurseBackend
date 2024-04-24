@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 using Microsoft.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace NurseApp.Repos
@@ -114,7 +115,27 @@ namespace NurseApp.Repos
         public async Task saveadvancedinfoasync(NurseAdvancedInfo advancedInfo)
         {
             await saveimageinlocalfolder(advancedInfo);
-            dbContext.NurseAdvancedInfo.Add(advancedInfo);
+            var nurseadvancedinfo=await dbContext.NurseAdvancedInfo.FirstOrDefaultAsync(u=>u.NurseId==advancedInfo.NurseId);
+            if (nurseadvancedinfo != null) 
+            {
+                nurseadvancedinfo.DateofBirth = advancedInfo.DateofBirth;
+                nurseadvancedinfo.Nationality = advancedInfo.Nationality;
+                nurseadvancedinfo.Location = advancedInfo.Location;
+                nurseadvancedinfo.Bio = advancedInfo.Bio;
+                nurseadvancedinfo.YearsOfExperience = advancedInfo.YearsOfExperience;
+                nurseadvancedinfo.Expertise = advancedInfo.Expertise;
+                nurseadvancedinfo.HourlyPrice = advancedInfo.HourlyPrice;
+                nurseadvancedinfo.DailyPrice = advancedInfo.DailyPrice;
+                nurseadvancedinfo.WeeklyPrice = advancedInfo.WeeklyPrice;
+                nurseadvancedinfo.passportimage = advancedInfo.passportimage;
+                nurseadvancedinfo.IdFrontImage = advancedInfo.IdFrontImage;
+                nurseadvancedinfo.IdBackImage = advancedInfo.IdBackImage;
+            }
+            else
+            {
+                await dbContext.NurseAdvancedInfo.AddAsync(advancedInfo);
+            }
+ 
             await dbContext.SaveChangesAsync();
 
         }
@@ -240,16 +261,17 @@ namespace NurseApp.Repos
                     Expertise = nurseadvancedinfo.Expertise,
                     Location = nurseadvancedinfo.Location,
                     IsBanned = user.IsBanned,
-                    Profile = user.ProfilePicture
+                    Profile = user.ProfilePicture,
+                    RoleId=user.RoleId
 
 
-                }).Where(u=>(expertise=="All"?u.Expertise==u.Expertise:u.Expertise==expertise) && u.IsBanned==false).ToListAsync();
+                }).Where(u=>(expertise=="All"?u.Expertise==u.Expertise:u.Expertise==expertise) && u.IsBanned==false && u.RoleId==2).ToListAsync();
 
                 foreach(var nurse in nurses)
                 {
                     nurse.Profile = await getprofilepicture(nurse.Profile);
                 }
-                return isclientpages==false?nurses:nurses.Take(3);
+                return isclientpages==false?nurses:nurses.Take(1);
              
         }
 
@@ -312,7 +334,34 @@ namespace NurseApp.Repos
             return result;
 
         }
-
+        public async Task<object?> getnursesignupadvancedinfoasync(int userid)
+        {
+            NurseAdvancedInfo? nurseadvanced = await dbContext.NurseAdvancedInfo.FirstOrDefaultAsync(x => x.NurseId == userid);
+            if(nurseadvanced == null) return null;
+            await getidentificationimages(nurseadvanced);
+            return nurseadvanced;
+        }
+        public async Task getidentificationimages(NurseAdvancedInfo advancedInfo)
+        {
+            if (advancedInfo.passportimage != null)
+            {
+                byte[] imageBytes = await System.IO.File.ReadAllBytesAsync(advancedInfo.passportimage);
+                string base64Image = Convert.ToBase64String(imageBytes);
+                advancedInfo.passportimage= base64Image;
+            }
+            if (advancedInfo.IdBackImage != null)
+            {
+                byte[] imageBytes = await System.IO.File.ReadAllBytesAsync(advancedInfo.IdBackImage);
+                string base64Image = Convert.ToBase64String(imageBytes);
+                advancedInfo.IdBackImage = base64Image;
+            }
+            if (advancedInfo.IdFrontImage != null)
+            {
+                byte[] imageBytes = await System.IO.File.ReadAllBytesAsync(advancedInfo.IdFrontImage);
+                string base64Image = Convert.ToBase64String(imageBytes);
+                advancedInfo.IdFrontImage = base64Image;
+            }
+        }
 
 
 

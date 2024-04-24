@@ -11,6 +11,8 @@
         public string Location { get; set; }
         public bool IsBanned { get; set; }
         public string? Profile { get; set; } // Assuming profile is a string
+
+        public int RoleId { get; set; }
         
     }
 }

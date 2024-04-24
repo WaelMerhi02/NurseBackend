@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public int NurseId { get; set; }
-        public string AvailableDates { get; set; }
+        public string? AvailableDates { get; set; }
     }
 }

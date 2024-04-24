@@ -24,6 +24,8 @@ namespace NurseApp.Interfaces
         public Task deleteprofilepictureasync(int id);
         public Task<object> getnurseadvancedinfoasync(int userid);
 
+        public Task<object> getnursesignupadvancedinfoasync(int userid);
+
 
 
 
